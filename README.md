@@ -9,7 +9,7 @@ Use kube-admission-image for customized image verification or scanning
 
 This will define the game rules for admission
 
- - images command specification
+ - images name specification
  - images unauthorized source Specification
  - images size specification
  - images startup specifications
