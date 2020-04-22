@@ -16,3 +16,4 @@
 
 .idea
 kube-admission-image
+logs/*

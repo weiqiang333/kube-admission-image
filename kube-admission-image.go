@@ -16,7 +16,7 @@ var configs config.FlagVar
 
 func init() {
 	log.SetFlags(log.Ldate | log.Lmicroseconds | log.LUTC)
-	logFile, err := os.OpenFile("kube-admission-image.log", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+	logFile, err := os.OpenFile("logs/kube-admission-image.log", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
