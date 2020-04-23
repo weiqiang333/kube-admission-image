@@ -20,24 +20,48 @@ func ImagesAdmission(c *gin.Context) {
 	body, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
 		log.Printf("body read fail: %v", err)
+		return
 	}
 
 	err = json.Unmarshal(body, &imageReview)
 	if err != nil {
 		log.Printf("body json Unmarshal fail: %v", err)
+		return
 	}
 
+	admissionPolicy(c, imageReview, review)
+}
+
+func admissionPolicy(c *gin.Context, imageReview, review v1alpha1.ImageReview) {
 	review.APIVersion = "imagepolicy.k8s.io/v1alpha1"
 	review.Kind = "ImageReview"
+	review.Status.Allowed = true
 
 	// NamePolicy
-	allow, err := admission.NamePolicy(imageReview)
+	allow, reason, err := admission.NamePolicy(imageReview)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
 	if !allow {
 		review.Status.Allowed = allow
-		review.Status.Reason = err.Error()
+		review.Status.Reason = reason
 		c.JSON(http.StatusBadRequest, review)
+		return
 	}
 
-	review.Status.Allowed = allow
+	// UnauthorizedSourcePolicy
+	allow, reason, err = admission.UnauthorizedSourcePolicy(imageReview)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	if !allow {
+		review.Status.Allowed = allow
+		review.Status.Reason = reason
+		c.JSON(http.StatusBadRequest, review)
+		return
+	}
+
 	c.JSON(http.StatusOK, review)
 }

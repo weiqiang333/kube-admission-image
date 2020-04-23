@@ -3,14 +3,18 @@ package web
 import (
 	"net/http"
 
-	"github.com/weiqiang333/kube-admission-image/web/handlers"
-
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 
-	"github.com/weiqiang333/kube-admission-image/pkg/config"
+	"github.com/weiqiang333/kube-admission-image/web/handlers"
 )
 
-func Web(configs config.FlagVar) {
+func Web() {
+	address := viper.GetString("address")
+	tls := viper.GetBool("tls")
+	cert := viper.GetString("cert")
+	key := viper.GetString("key")
+
 	router := gin.Default()
 
 	router.GET("/healthz", func(context *gin.Context) {
@@ -18,8 +22,8 @@ func Web(configs config.FlagVar) {
 	})
 	router.POST("/images_admission", handlers.ImagesAdmission)
 
-	if configs.Tls {
-		router.RunTLS(configs.Addrss, configs.CertFile, configs.KeyFile)
+	if tls {
+		router.RunTLS(address, cert, key)
 	}
-	router.Run(configs.Addrss)
+	router.Run(address)
 }

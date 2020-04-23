@@ -3,13 +3,14 @@
 package main
 
 import (
-	"flag"
 	"log"
 	"os"
 
-	"github.com/weiqiang333/kube-admission-image/web"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 
 	"github.com/weiqiang333/kube-admission-image/pkg/config"
+	"github.com/weiqiang333/kube-admission-image/web"
 )
 
 var configs config.FlagVar
@@ -22,22 +23,29 @@ func init() {
 	}
 	log.SetOutput(logFile)
 
-	flag.StringVar(&configs.Addrss, "address", "0.0.0.0:8080", "run listening port")
-	flag.BoolVar(&configs.Tls, "tls", false, "Turn on TLS (-cert, -key)")
-	flag.StringVar(&configs.CertFile, "cert", "tls.crt", "Cert file for TLS")
-	flag.StringVar(&configs.KeyFile, "key", "tls.crt", "Key file for TLS")
+	pflag.String("address", "0.0.0.0:8080", "run listening port")
+	tls := pflag.Bool("tls", false, "Turn on TLS (-cert, -key)")
+	cert := pflag.String("cert", "tls.crt", "Cert file for TLS")
+	key := pflag.String("key", "tls.crt", "Key file for TLS")
+	pflag.String("sourceDefaultPolicy", "allow", "images source default policy."+
+		"\nplease configure the default reject policy carefully.\nOptions (allow|reject)")
+	pflag.StringSlice("sourceAllowPolicy", []string{}, "Policy that allows images source."+
+		"\nUser: --sourceAllowPolicy=terminus.io,terminus.com")
+	pflag.StringSlice("sourceRejectPolicy", []string{}, "Policy that reject images source")
 
-	flag.Parse()
-	if configs.Tls {
-		if _, err := os.Stat(configs.CertFile); os.IsNotExist(err) {
-			log.Fatalf("Please check your certificate: %s", configs.CertFile)
+	viper.BindPFlags(pflag.CommandLine)
+	pflag.Parse()
+
+	if *tls {
+		if _, err := os.Stat(*cert); os.IsNotExist(err) {
+			log.Fatalf("Please check your certificate: %s", *cert)
 		}
-		if _, err := os.Stat(configs.KeyFile); os.IsNotExist(err) {
-			log.Fatalf("Please check your key: %s", configs.KeyFile)
+		if _, err := os.Stat(*key); os.IsNotExist(err) {
+			log.Fatalf("Please check your key: %s", *key)
 		}
 	}
 }
 
 func main() {
-	web.Web(configs)
+	web.Web()
 }

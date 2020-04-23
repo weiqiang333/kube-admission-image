@@ -5,38 +5,40 @@ import (
 	"log"
 	"strings"
 
-	"github.com/containers/image/docker/reference"
 	"k8s.io/api/imagepolicy/v1alpha1"
+
+	"github.com/containers/image/docker/reference"
 )
 
 // NamePolicy
-func NamePolicy(imageReview v1alpha1.ImageReview) (bool, error) {
+// response: allow bool, reason string, error
+func NamePolicy(imageReview v1alpha1.ImageReview) (bool, string, error) {
 	allow := true
 
 	// 拒绝使用 latest version images
 	// 并对不遵守 https://github.com/containers/image/pull/220 container 规范化进行警示, 不拒绝
-	if allow, err := policyLatestTag(imageReview); !allow {
-		return allow, err
+	if allow, reason, err := policyLatestTag(imageReview); !allow || err != nil {
+		return allow, reason, err
 	}
 
-	return allow, nil
+	return allow, "", nil
 }
 
 // policyLatestTag
-func policyLatestTag(imageReview v1alpha1.ImageReview) (bool, error) {
+func policyLatestTag(imageReview v1alpha1.ImageReview) (bool, string, error) {
 	allow := true
 	for _, container := range imageReview.Spec.Containers {
 		usingLatest, err := isUsingLatestTag(container.Image)
 		if err != nil {
-			log.Printf("Error while parsing image name: %+v", err)
-			return allow, fmt.Errorf("Error while parsing image name: %+v", err)
+			log.Printf("Error while parsing image name (%v): %+v", container.Image, err)
+			return allow, "", fmt.Errorf("Error while parsing image name (%v): %+v", container.Image, err)
 		}
 		if usingLatest {
 			allow = false
-			return allow, fmt.Errorf("Images using latest tag are not allowed")
+			return allow, "Images using latest tag are not allowed", nil
 		}
 	}
-	return allow, nil
+	return allow, "", nil
 }
 
 func isUsingLatestTag(image string) (bool, error) {
