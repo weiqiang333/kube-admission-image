@@ -5,9 +5,8 @@ import (
 	"log"
 	"strings"
 
-	"k8s.io/api/imagepolicy/v1alpha1"
-
 	"github.com/containers/image/docker/reference"
+	"k8s.io/api/imagepolicy/v1alpha1"
 )
 
 // NamePolicy

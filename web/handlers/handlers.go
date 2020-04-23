@@ -20,12 +20,14 @@ func ImagesAdmission(c *gin.Context) {
 	body, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
 		log.Printf("body read fail: %v", err)
+		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	err = json.Unmarshal(body, &imageReview)
 	if err != nil {
 		log.Printf("body json Unmarshal fail: %v", err)
+		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
