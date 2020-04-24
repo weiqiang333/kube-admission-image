@@ -2,7 +2,7 @@
 
 - Open the admission-controllers of ImagePolicyWebhook by adding --enable-admission-plugins
 ```
-    kube-apiserver 增加启动参数
+    kube-apiserver Increase startup parameters
     --enable-admission-plugins=ImagePolicyWebhook
     --admission-control-config-file=/kube-apiserver-image-admission.yaml
 ```

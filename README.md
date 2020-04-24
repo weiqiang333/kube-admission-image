@@ -23,7 +23,7 @@ This will define the game rules for admission
 - go run kube-admission-image.go
 
 #### container
-- docker pull flavio/kube-image-bouncer
+- docker pull weiqiang333/kube-admission-image
 
 #### docker hub
 - [docker hub](https://hub.docker.com/repository/docker/weiqiang333/kube-admission-image)
