@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-admission-image
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: kube-admission-image
+  template:
+    metadata:
+      labels:
+        app: kube-admission-image
+    spec:
+      containers:
+        - name: kube-admission-image
+          image: "weiqiang333/kube-admission-image:1.0.0"
+          args:
+            - "--tls"
+            - "--cert=/etc/admission-controller/tls/tls.crt"
+            - "--key=/etc/admission-controller/tls/tls.key"
+          volumeMounts:
+            - name: tls
+              mountPath: /etc/admission-controller/tls
+          ports:
+            - name: webhook
+              containerPort: 8080
+      volumes:
+        - name: tls
+          secret:
+            secretName: tls-kube-admission-image
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kube-admission-image
+  name: kube-admission-image
+  namespace: kube-system
+spec:
+  ports:
+    - name: webhook
+      port: 443
+      targetPort: webhook
+      protocol: "TCP"
+  selector:
+    app: kube-admission-image
