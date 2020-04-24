@@ -22,7 +22,7 @@ func init() {
 	pflag.String("sourceDefaultPolicy", "allow", "images source default policy."+
 		"\nplease configure the default reject policy carefully.\nOptions (allow|reject)")
 	pflag.StringSlice("sourceAllowPolicy", []string{}, "Policy that allows images source."+
-		"\nUser: --sourceAllowPolicy=terminus.io,terminus.com")
+		"\nUser: --sourceAllowPolicy=weiqiang333,weiqiang333.com")
 	pflag.StringSlice("sourceRejectPolicy", []string{}, "Policy that reject images source")
 
 	viper.BindPFlags(pflag.CommandLine)
