@@ -58,3 +58,4 @@ kubectl apply -f configs/kubernetes/kube-admission-image-deployment.yaml
 
 
 ## FAQ
+- Pay attention to using strategy logic to avoid chicken and egg problems

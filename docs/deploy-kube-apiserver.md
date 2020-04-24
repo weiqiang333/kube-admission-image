@@ -1,13 +1,13 @@
 # deploy kube-apiserver
 
-- 通过增加 --enable-admission-plugins 来开启 ImagePolicyWebhook 的 admission-controllers
+- Open the admission-controllers of ImagePolicyWebhook by adding --enable-admission-plugins
 ```
     kube-apiserver 增加启动参数
     --enable-admission-plugins=ImagePolicyWebhook
     --admission-control-config-file=/kube-apiserver-image-admission.yaml
 ```
 
-- admission-control-config-file 中引用 ImagePolicyWebhook 配置 kube-apiserver-image-admission.yaml
+- Reference ImagePolicyWebhook in admission-control-config-file, configure kube-apiserver-image-admission.yaml
 ```
 imagePolicy:
   kubeConfigFile: /kube-apiserver-image-admission-config.yaml
@@ -16,9 +16,9 @@ imagePolicy:
   retryBackoff: 500
   defaultAllow: true
 ```
-> 注意：如果连接不到 webhook 将默认允许所有 images
+> Note: If you cannot connect to the webhook, all images will be allowed by default
 
-- kubeconfig 内容 kube-apiserver-image-admission-config.yaml
+- kubeconfig content kube-apiserver-image-admission-config.yaml
 ```
 apiVersion: v1
 kind: Config

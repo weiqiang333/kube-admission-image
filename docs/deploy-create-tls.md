@@ -10,7 +10,7 @@ cat > domain-ca-csr.json <<EOF
     "size": 2048
   },
   "ca":{
-    "expiry": "240000h"
+    "expiry": "47520h"
   }
 }
 EOF
