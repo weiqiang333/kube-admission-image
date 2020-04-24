@@ -14,11 +14,6 @@ import (
 
 func init() {
 	log.SetFlags(log.Ldate | log.Lmicroseconds | log.LUTC)
-	logFile, err := os.OpenFile("logs/kube-admission-image.log", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
-	log.SetOutput(logFile)
 
 	pflag.String("address", "0.0.0.0:8080", "run listening port")
 	tls := pflag.Bool("tls", false, "Turn on TLS (-cert, -key)")
