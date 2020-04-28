@@ -19,6 +19,7 @@ func init() {
 	tls := pflag.Bool("tls", false, "Turn on TLS (-cert, -key)")
 	cert := pflag.String("cert", "tls.crt", "Cert file for TLS")
 	key := pflag.String("key", "tls.key", "Key file for TLS")
+	pflag.StringSlice("nameRejectPolicy", []string{"latestTag"}, "Policy that reject images name")
 	pflag.String("sourceDefaultPolicy", "allow", "images source default policy."+
 		"\nplease configure the default reject policy carefully.\nOptions (allow|reject)")
 	pflag.StringSlice("sourceAllowPolicy", []string{}, "Policy that allows images source."+
