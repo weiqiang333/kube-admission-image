@@ -58,8 +58,8 @@ kubectl apply -f configs/kubernetes/kube-admission-image-deployment.yaml
 
 
 #### Test acceptance
- - 通过 curl 请求测试
- - 通过 deploy 测试
+ - Test with curl request
+ - Pass deploy test
 
     [View detailed process](docs/deploy-check.md)
 
