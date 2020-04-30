@@ -5,6 +5,9 @@ import (
 	"log"
 	"strings"
 
+	"github.com/spf13/viper"
+	"github.com/weiqiang333/kube-admission-image/pkg/method"
+
 	"github.com/containers/image/docker/reference"
 	"k8s.io/api/imagepolicy/v1alpha1"
 )
@@ -13,11 +16,14 @@ import (
 // response: allow bool, reason string, error
 func NamePolicy(imageReview v1alpha1.ImageReview) (bool, string, error) {
 	allow := true
+	nameRejectPolicy := viper.GetStringSlice("nameRejectPolicy")
 
 	// 拒绝使用 latest version images
 	// 并对不遵守 https://github.com/containers/image/pull/220 container 规范化进行警示, 不拒绝
-	if allow, reason, err := policyLatestTag(imageReview); !allow || err != nil {
-		return allow, reason, err
+	if method.FindsStringSlice(nameRejectPolicy, "latestTag") {
+		if allow, reason, err := policyLatestTag(imageReview); !allow || err != nil {
+			return allow, reason, err
+		}
 	}
 
 	return allow, "", nil
