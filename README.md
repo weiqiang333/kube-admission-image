@@ -57,5 +57,12 @@ kubectl apply -f configs/kubernetes/kube-admission-image-deployment.yaml
 ```
 
 
+#### Test acceptance
+ - 通过 curl 请求测试
+ - 通过 deploy 测试
+
+    [View detailed process](docs/deploy-check.md)
+
+
 ## FAQ
 - Pay attention to using strategy logic to avoid chicken and egg problems
