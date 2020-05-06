@@ -67,7 +67,7 @@ kubectl apply -f configs/kubernetes/kube-admission-image-deployment.yaml
 #### pigeon
  - pigeon version is: ImagePolicyWebhook entry rules inspection, but do not refuse
  - Usually for the stability of the environment, we need pigeon version to find non-compliant admission images, and use the official version after correcting them
- - tag: pigeon, images: weiqiang333/kube-admission-image:pigeon
+ - tag: [pigeon](https://github.com/weiqiang333/kube-admission-image/tree/pigeon), images: weiqiang333/kube-admission-image:pigeon
 
 
 ## FAQ
