@@ -46,7 +46,7 @@ func admissionPolicy(c *gin.Context, imageReview, review v1alpha1.ImageReview) {
 		return
 	}
 	if !allow {
-		review.Status.Allowed = allow
+		review.Status.Allowed = true
 		review.Status.Reason = reason
 		c.JSON(http.StatusOK, review)
 		return
@@ -59,7 +59,7 @@ func admissionPolicy(c *gin.Context, imageReview, review v1alpha1.ImageReview) {
 		return
 	}
 	if !allow {
-		review.Status.Allowed = allow
+		review.Status.Allowed = true
 		review.Status.Reason = reason
 		c.JSON(http.StatusOK, review)
 		return
