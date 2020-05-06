@@ -40,6 +40,7 @@ func policyLatestTag(imageReview v1alpha1.ImageReview) (bool, string, error) {
 		}
 		if usingLatest {
 			allow = false
+			log.Printf("Images using latest tag are not allowed: %s in namespace %s", container.Image, imageReview.Spec.Namespace)
 			return allow, "Images using latest tag are not allowed", nil
 		}
 	}

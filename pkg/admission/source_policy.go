@@ -2,6 +2,7 @@ package admission
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/spf13/viper"
 	"k8s.io/api/imagepolicy/v1alpha1"
@@ -33,12 +34,14 @@ func designatedSourcePolicy(imageReview v1alpha1.ImageReview) (bool, string, err
 		if method.FindsStringSlice(sourceRejectPolicy, domain) {
 			allow = false
 			reason := fmt.Sprintf("UnauthorizedSourcePolicy, %s violation designatedSource %v", domain, sourceRejectPolicy)
+			log.Printf("UnauthorizedSourcePolicy, %s violation designatedSource %v", domain, sourceRejectPolicy)
 			return allow, reason, nil
 		}
 		if sourceDefaultPolicy == "reject" {
 			if !method.FindsStringSlice(sourceAllowPolicy, domain) {
 				allow = false
 				reason := fmt.Sprintf("UnauthorizedSourcePolicy, %s does not exist designatedSource %v", domain, sourceAllowPolicy)
+				log.Printf("UnauthorizedSourcePolicy, %s does not exist designatedSource %v", domain, sourceAllowPolicy)
 				return allow, reason, nil
 			}
 		}
